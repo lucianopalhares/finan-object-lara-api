@@ -15,4 +15,24 @@ class BankTransaction extends Model
         'bank_account_id',
         'value'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class);
+    }
+
+    public function bankAccount()
+    {
+        return $this->belongsTo(BankAccount::class);
+    }
+
+    public function username()
+    {
+        return $this->user ? $this->user->name : null;
+    }
 }

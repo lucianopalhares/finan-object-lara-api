@@ -7,6 +7,7 @@ use App\Models\BankTransaction;
 use App\Models\PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Events\BankTransactionAudited;
 
 class BankTransactionController extends Controller
 {
@@ -52,7 +53,9 @@ class BankTransactionController extends Controller
             'value' => $totalValue
         );
 
-        BankTransaction::create($transaction);
+        $bankTransaction = BankTransaction::create($transaction);
+
+        event(new BankTransactionAudited($bankTransaction, 'created'));
 
         return response()->json([
             'numero_conta' => $account->account_number,
