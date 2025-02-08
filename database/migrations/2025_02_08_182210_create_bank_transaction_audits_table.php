@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('bank_transaction_audits', function (Blueprint $table) {
             $table->id();
             $table->foreignId('bank_transaction_id')->nullable()->constrained();
-            $table->string('user_name');
+            $table->string('user_name')->nullable();
             $table->string('payment_method_code');
-            $table->string('bank_account_name');
+            $table->string('payment_method_tax_rate');
+            $table->string('bank_account_number');
             $table->enum('action', ['created', 'updated', 'deleted']);
             $table->timestamps();
         });

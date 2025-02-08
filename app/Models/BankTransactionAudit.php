@@ -10,7 +10,8 @@ class BankTransactionAudit extends Model
         'bank_transaction_id',
         'user_name',
         'payment_method_code',
-        'bank_account_name',
+        'payment_method_tax_rate',
+        'bank_account_number',
         'action'
     ];
 }
