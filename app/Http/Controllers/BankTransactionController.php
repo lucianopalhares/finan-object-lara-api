@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BankAccount;
+use App\Models\PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,13 +24,13 @@ class BankTransactionController extends Controller
         $account = BankAccount::where('account_number', $request->input('numero_conta'))->first();
 
         if (!$account) {
-            return response()->json(['message' => 'Account not found'], 404);
+            return response()->json(['message' => 'Conta não encontrada!'], 404);
         }
 
         $paymentMethod = PaymentMethod::whereCode($request->input('forma_pagamento'));
 
         if (!$paymentMethod) {
-            return response()->json(['message' => 'Invalid payment method'], 400);
+            return response()->json(['message' => 'Forma de pagamento inválida!'], 400);
         }
 
         $value = $request->input('valor');
