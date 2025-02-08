@@ -67,6 +67,63 @@ php artisan db:seed
 chmod 777 -R storage bootstrap
 ```
 
+### Exemplo de uso [criar ou realizar login com usuário]:
+
+#### crie um usuário pela api
+
+metodo: POST
+url:
+```
+http://localhost:8000/api/register
+```
+body:
+```
+{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "password",
+    "password_confirmation": "password"
+}
+```
+
+a conta do usuário sera criada
+e um token de acesso sera gerado
+
+#### se usuário ja foi criado, faça login
+
+metodo: POST
+url:
+```
+http://localhost:8000/api/login
+```
+body:
+```
+{
+    "email": "john@example.com",
+    "password": "password"
+}
+```
+
+um token de acesso sera gerado
+
+#### se usuário ja esta logado e deseja apenas pegar os dados
+
+metodo: GET
+url:
+```
+http://localhost:8000/api/profile
+```
+
+#### sair da sessão do usuário
+
+metodo: POST
+url:
+```
+http://localhost:8000/api/logout
+```
+
+#### utilize o token para as proximas etapas
+
 ### Exemplo de uso [gerenciar transações]:
 
 
@@ -76,6 +133,7 @@ chmod 777 -R storage bootstrap
     -   saldo: valor em reais
 
 metodo: POST
+authorization: BearerToken (use o token gerado)
 url:
 ```
 http://localhost:8000/api/conta
@@ -91,6 +149,7 @@ body:
 #### visualizar uma conta bancária
 
 metodo: GET
+authorization: BearerToken (use o token gerado)
 url:
 ```
 http://localhost:8000/api/conta?numero_conta=5855
@@ -103,6 +162,7 @@ http://localhost:8000/api/conta?numero_conta=5855
     -   valor: valor em reais
 
 metodo: POST
+authorization: BearerToken (use o token gerado)
 url:
 ```
 http://localhost:8000/api/transacao
