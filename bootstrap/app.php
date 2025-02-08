@@ -15,5 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->render(function (Exception $e) {
+            return response()->json([
+                'message' => 'Não autorizado',
+                'error'   => $e->getMessage()
+            ], 401);
+        });
     })->create();
