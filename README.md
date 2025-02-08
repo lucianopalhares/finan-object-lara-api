@@ -13,6 +13,9 @@ Microserviço para transações financeiras. Funcionalidades:
 * Framework Laravel 11 (php 8.4)
 * API de Microserviço com as melhores práticas de design patterns
 * Banco de dados Mysql
+* Autenticação JWT
+* Documentação da API
+* Teste unitário com PHPunit
 
 ### Instalação
 
@@ -111,6 +114,16 @@ body:
     "numero_conta":5855,
     "valor":10.58
 }
+```
+
+#### execute os testes, serão rodados os seguintes testes:
+
+    -   criar transação
+    -   criar conta
+    -   exibir uma conta
+
+```
+php artisan test --testsuite=Feature
 ```
 
 ## License
