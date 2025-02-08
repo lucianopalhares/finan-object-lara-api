@@ -17,14 +17,21 @@ class RecordBankTransactionAudit
     {
         $transaction = $event->bankTransaction;
 
-        BankTransactionAudit::create([
+        $audit = BankTransactionAudit::firstOrCreate([
             'bank_transaction_id' => $transaction->id,
+            'action' => $event->action
+        ], [
             'user_name' => $transaction->username(),
             'payment_method_code' => $transaction->paymentMethod->code,
             'payment_method_tax_rate' => $transaction->paymentMethod->tax_rate,
             'bank_account_number' => $transaction->bankAccount->account_number,
-            'value' => $transaction->value,
-            'action' => $event->action
+            'value' => $transaction->value
         ]);
+
+        if (!$audit->wasRecentlyCreated) {
+            return;
+        }
+
+        $audit->save();
     }
 }

@@ -9,6 +9,20 @@ class BankTransaction extends Model
 {
     use HasFactory;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'bank_transactions';
+
+    /**
+     * Custom alias for logging.
+     *
+     * @var string
+     */
+    public $logAlias = 'Transação Bancária';
+
     protected $fillable = [
         'user_id',
         'payment_method_id',
