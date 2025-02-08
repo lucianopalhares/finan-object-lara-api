@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('bank_transactions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('payment_method_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('bank_account_id')->nullable()->constrained()->onDelete('set null');
+            $table->decimal('value', 10, 2);
             $table->timestamps();
         });
     }

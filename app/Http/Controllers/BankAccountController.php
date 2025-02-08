@@ -11,7 +11,7 @@ class BankAccountController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'numero_conta' => 'required|integer|unique:bank_accounts,account_number',
+            'numero_conta' => 'required|unique:bank_accounts,account_number',
             'saldo' => 'required|numeric|min:0',
         ]);
 
@@ -33,14 +33,16 @@ class BankAccountController extends Controller
     public function show(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'numero_conta' => 'required|integer',
+            'numero_conta' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
 
-        $account = BankAccount::where('account_number', $request->input('numero_conta'))->first();
+        $account_number = $request->input('numero_conta');
+
+        $account = BankAccount::where('account_number', $account_number)->first();
 
         if (!$account) {
             return response()->json(['message' => 'Numero da conta não encontrado.'], 404);
