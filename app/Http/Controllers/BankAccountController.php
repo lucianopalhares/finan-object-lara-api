@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BankAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class BankAccountController extends Controller
 {
@@ -26,6 +27,8 @@ class BankAccountController extends Controller
         unset($data['numero_conta'], $data['saldo']);
 
         $account = BankAccount::create($data);
+
+        Log::channel('database')->info('Conta bancária cadastrada.', $data);
 
         return response()->json([
             'numero_conta' => $account->account_number,
