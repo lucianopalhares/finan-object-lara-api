@@ -67,6 +67,22 @@ php artisan db:seed
 chmod 777 -R storage bootstrap
 ```
 
+### observabilidade com Sentry (acompanhamento de erros)
+
+    -   acesse a seguinte url para acompanhar os erros da aplicação =
+
+usuário e senha =
+
+```
+xebok35047@fundapk.com
+```
+
+```
+dK54865*hh
+```
+
+https://test-dby.sentry.io/organizations/test-dby/issues/?project=4508786073862144&statsPeriod=14d
+
 ### Exemplo de uso [criar ou realizar login com usuário]:
 
 #### crie um usuário pela api

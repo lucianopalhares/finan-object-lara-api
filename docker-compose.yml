@@ -43,9 +43,24 @@ services:
     networks:
       - laravel_network_finan_object
 
+
+  redis:
+    image: redis:alpine
+    container_name: finan_object_lara_redis
+    ports:
+      - "6388:6379"
+    expose:
+      - 6388
+    networks:
+      - laravel_network_finan_object
+    volumes:
+      - redis_data_finan_object:/data
+
+
 networks:
   laravel_network_finan_object:
     driver: bridge
 
 volumes:
   mysql_data_finan_object:
+  redis_data_finan_object:

@@ -4,6 +4,9 @@ namespace App\Listeners;
 
 use App\Events\BankTransactionAudited;
 use App\Models\BankTransactionAudit;
+use Illuminate\Support\Facades\Log;
+use function Sentry\captureException;
+
 
 class RecordBankTransactionAudit
 {
@@ -15,23 +18,28 @@ class RecordBankTransactionAudit
      */
     public function handle(BankTransactionAudited $event)
     {
-        $transaction = $event->bankTransaction;
+        try {
+            $transaction = $event->bankTransaction;
 
-        $audit = BankTransactionAudit::firstOrCreate([
-            'bank_transaction_id' => $transaction->id,
-            'action' => $event->action
-        ], [
-            'user_name' => $transaction->username(),
-            'payment_method_code' => $transaction->paymentMethod->code,
-            'payment_method_tax_rate' => $transaction->paymentMethod->tax_rate,
-            'bank_account_number' => $transaction->bankAccount->account_number,
-            'value' => $transaction->value
-        ]);
+            $audit = BankTransactionAudit::firstOrCreate([
+                'bank_transaction_id' => $transaction->id,
+                'action' => $event->action
+            ], [
+                'user_name' => $transaction->username(),
+                'payment_method_code' => $transaction->paymentMethod->code,
+                'payment_method_tax_rate' => $transaction->paymentMethod->tax_rate,
+                'bank_account_number' => $transaction->bankAccount->account_number,
+                'value' => $transaction->value
+            ]);
 
-        if (!$audit->wasRecentlyCreated) {
-            return;
+            if (!$audit->wasRecentlyCreated) {
+                return;
+            }
+
+            $audit->save();
+        } catch (\Exception $e) {
+            captureException($e);
+            Log::error('Erro ao gravar auditoria da transação bancária: ' . $e->getMessage());
         }
-
-        $audit->save();
     }
 }

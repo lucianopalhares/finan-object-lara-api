@@ -6,12 +6,12 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use App\Listeners\RecordBankTransactionAudit;
 use App\Events\BankTransactionAudited;
-use App\Listeners\LogModelChanges;
 use Illuminate\Database\Eloquent\Model;
 use App\Observers\BankTransactionObserver;
 use App\Models\BankTransaction;
 use App\Observers\BankAccountObserver;
 use App\Models\BankAccount;
+use Sentry\Laravel\Integration;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,5 +35,13 @@ class AppServiceProvider extends ServiceProvider
 
         BankTransaction::observe(BankTransactionObserver::class);
         BankAccount::observe(BankAccountObserver::class);
+
+        Model::preventLazyLoading();
+
+        if (app()->isProduction()) {
+            Model::handleLazyLoadingViolationUsing(
+                Integration::lazyLoadingViolationReporter()
+            );
+        }
     }
 }
