@@ -56,6 +56,19 @@ services:
     volumes:
       - redis_data_finan_object:/data
 
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    container_name: finan_object_lara_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - ./init_rabbitmq.sh:/init_rabbitmq.sh
+    networks:
+      - laravel_network_finan_object
 
 networks:
   laravel_network_finan_object:
