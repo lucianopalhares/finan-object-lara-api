@@ -66,7 +66,7 @@ services:
       - "15672:15672"
       - "5672:5672"
     volumes:
-      - ./init_rabbitmq.sh:/init_rabbitmq.sh
+      - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - laravel_network_finan_object
 
@@ -77,3 +77,5 @@ networks:
 volumes:
   mysql_data_finan_object:
   redis_data_finan_object:
+  rabbitmq_data:
+    driver: local

@@ -45,6 +45,7 @@ RUN echo "xdebug.mode=debug\n\
     xdebug.log=/var/log/xdebug.log\n\
     xdebug.max_nesting_level=256" > /usr/local/etc/php/conf.d/20-xdebug.ini
 
-ENTRYPOINT ["php-fpm"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-EXPOSE 9000
+ENTRYPOINT ["/entrypoint.sh"]

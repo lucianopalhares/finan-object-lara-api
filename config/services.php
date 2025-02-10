@@ -34,16 +34,4 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
-    'rabbitmq' => [
-        'host' => env('RABBITMQ_HOST', 'finan_object_lara_rabbitmq'),
-        'port' => env('RABBITMQ_PORT', '5672'),
-        'user' => env('RABBITMQ_USER', 'user'),
-        'password' => env('RABBITMQ_PASSWORD', 'password'),
-        'queue' => env('RABBITMQ_QUEUE', 'queue'),
-        'exchange' => env('RABBITMQ_EXCHANGE', 'exchange'),
-        'bind' => env('RABBITMQ_BIND', 'bind'),
-        'vhost' => env('RABBITMQ_VHOST', '/'),
-        'email_report_sales' => env('RABBITMQ_EMAIL_REPORT_SALES', '/'),
-    ],
 ];

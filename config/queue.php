@@ -74,16 +74,26 @@ return [
 
         'rabbitmq' => [
             'driver' => 'rabbitmq',
-            'host' => env('RABBITMQ_HOST', 'localhost'),
+            'host' => env('RABBITMQ_HOST', '127.0.0.1'),
             'port' => env('RABBITMQ_PORT', 5672),
-            'user' => env('RABBITMQ_USER', 'user'),
-            'password' => env('RABBITMQ_PASSWORD', 'password'),
             'vhost' => env('RABBITMQ_VHOST', '/'),
-            'queue' => env('RABBITMQ_QUEUE', 'emails'),
-            'exchange' => 'emails',
-            'exchange_type' => 'direct',
-            'routing_key' => 'emails',
+            'login' => env('RABBITMQ_USER', 'guest'),
+            'password' => env('RABBITMQ_PASSWORD', 'guest'),
+            'queue' => env('RABBITMQ_QUEUE', 'default'),
+            'options' => [
+                'exchange' => [
+                    'name' => env('RABBITMQ_EXCHANGE_NAME', 'default'),
+                    'type' => env('RABBITMQ_EXCHANGE_TYPE', 'direct'),
+                    'declare' => env('RABBITMQ_EXCHANGE_DECLARE', true),
+                ],
+            ],
+            'failed' => false,
         ],
+        'failed' => [
+            'database' => null,
+            'table' => 'failed_jobs',
+        ],
+
     ],
 
     /*
