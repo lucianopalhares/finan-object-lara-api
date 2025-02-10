@@ -10,7 +10,6 @@ class BankTransactionAudited
     use SerializesModels;
 
     public $bankTransaction;
-    public $action;
 
     /**
      * Create a new event instance.
@@ -22,6 +21,6 @@ class BankTransactionAudited
     public function __construct(BankTransaction $bankTransaction, $action)
     {
         $this->bankTransaction = $bankTransaction;
-        $this->action = $action;
+        $this->bankTransaction->action = $action;
     }
 }

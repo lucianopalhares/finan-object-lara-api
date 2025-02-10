@@ -9,9 +9,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Events\BankTransactionAudited;
 use Illuminate\Support\Facades\Log;
+use App\Cache\RedisCacheService;
 
 class BankTransactionController extends Controller
 {
+    public function __construct(private RedisCacheService $cacheService) {}
+
     public function transact(Request $request)
     {
         try {
@@ -31,10 +34,18 @@ class BankTransactionController extends Controller
                 return response()->json(['message' => 'Conta não encontrada!'], 404);
             }
 
-            $paymentMethod = PaymentMethod::whereCode($request->input('forma_pagamento'))->first();
+            $cacheKey = "payment_method_id_" . $request->input('forma_pagamento');
 
-            if (!$paymentMethod) {
-                return response()->json(['message' => 'Forma de pagamento inválida!'], 400);
+            if ($cachedTasks = $this->cacheService->getWithIdentifier($cacheKey)) {
+                $paymentMethod = $cachedTasks;
+            } else {
+                $paymentMethod = PaymentMethod::whereCode($request->input('forma_pagamento'))->first();
+
+                if (!$paymentMethod) {
+                    return response()->json(['message' => 'Forma de pagamento inválida!'], 400);
+                }
+
+                $this->cacheService->setWithIdentifier($cacheKey, $paymentMethod, 86400);
             }
 
             $value = $request->input('valor');
@@ -56,8 +67,9 @@ class BankTransactionController extends Controller
             );
 
             $bankTransaction = BankTransaction::create($transaction);
+            $bankTransaction->load('paymentMethod', 'bankAccount', 'user');
 
-            event(new BankTransactionAudited($bankTransaction, 'cadastro'));
+            event(new BankTransactionAudited($bankTransaction, 'created'));
 
             return response()->json([
                 'numero_conta' => $account->account_number,

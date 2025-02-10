@@ -45,8 +45,8 @@ class BankTransaction extends Model
         return $this->belongsTo(BankAccount::class);
     }
 
-    public function username()
+    public function getUsernameAttribute()
     {
-        return $this->user ? $this->user->name : null;
+        return $this->user ? $this->user->name : '';
     }
 }
