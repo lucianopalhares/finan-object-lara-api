@@ -69,12 +69,6 @@ class BankTransactionController extends Controller
             $bankTransaction = BankTransaction::create($transaction);
             $bankTransaction->load('paymentMethod', 'bankAccount', 'user');
 
-            $b = json_encode($bankTransaction);
-
-            $c = json_decode($b);
-
-            $pay = $c->payment_method->tax_rate;
-
             event(new BankTransactionAudited($bankTransaction, 'created'));
 
             return response()->json([

@@ -28,12 +28,6 @@ class PublishBankTransactionAudit implements ShouldQueue
         try {
             $transaction = json_decode($this->message);
 
-            Log::error('Erro durante a publicação dos logs no dddddddddddddddd', [
-                'error' => $transaction,
-            ]);
-
-            return;
-
             $audit = BankTransactionAudit::firstOrCreate([
                 'bank_transaction_id' => $transaction->id,
                 'action' => $transaction->action
@@ -46,20 +40,15 @@ class PublishBankTransactionAudit implements ShouldQueue
             ]);
 
             if (!$audit->wasRecentlyCreated) {
-                Log::info('Registros de logs não publicados no RabbitMQ com sucesso.');
                 return;
             }
 
             $audit->save();
 
-            Log::error('Erro durante a publicação dos logs no dddddddddddddddd', [
-                'error' => 'ddd',
-            ]);
-
-            Log::info('Registros de logs publicados no RabbitMQ com sucesso.');
+            Log::info('Registros de auditoria de transações publicados no RabbitMQ com sucesso.');
 
         } catch (\Exception $e) {
-            Log::error('Erro durante a publicação dos logs no RabbitMQ', [
+            Log::error('Erro durante a publicação das auditorias no RabbitMQ', [
                 'error' => $e->getMessage(),
             ]);
         }
