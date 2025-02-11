@@ -3,8 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\BankAccount;
-use Tests\TestCase; // Use a classe TestCase do Laravel
-use App\Models\Order;
+use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -16,7 +15,13 @@ class BankAccountTest extends TestCase
      */
     public function test_that_endpoint_create_bank_account_returns_a_successful_response(): void
     {
-        $response = $this->post('/api/conta', [
+        $user = User::factory()->create();
+
+        $token = JWTAuth::fromUser($user);
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->post('/api/conta', [
             "numero_conta" => str_pad(fake()->unique()->randomNumber(6, true), 6, '0', STR_PAD_LEFT),
             "saldo" => fake()->randomElement([5, 599, 101, 777, 1058, 59666]),
         ]);
@@ -36,7 +41,13 @@ class BankAccountTest extends TestCase
     {
         $account = BankAccount::factory()->create();
 
-        $response = $this->get('/api/conta/?numero_conta=' . $account->account_number);
+        $user = User::factory()->create();
+
+        $token = JWTAuth::fromUser($user);
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->get('/api/conta/?numero_conta=' . $account->account_number);
 
         $response->assertStatus(201);
 

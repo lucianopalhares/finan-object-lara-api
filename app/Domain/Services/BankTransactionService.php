@@ -58,7 +58,7 @@ class BankTransactionService extends ServiceResponse {
             return true;
 
         } catch (Exception $e) {
-            $this->setStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->setStatus($e->getCode());
             $this->setMessage('Erro ao salvar conta. Tente novamente mais tarde.');
             $this->setError($e->getMessage());
             $this->saveLog();
