@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BankAccountController;
-use App\Http\Controllers\BankTransactionController;
-use App\Http\Controllers\BankTransactionAuditController;
-use App\Http\Controllers\LogController;
+use App\Application\Controllers\BankAccountController;
+use App\Application\Controllers\BankTransactionController;
+use App\Application\Controllers\BankTransactionAuditController;
+use App\Application\Controllers\LogController;
 use App\Http\Controllers\AuthController;
 
 Route::post('register', [AuthController::class, 'register']);
