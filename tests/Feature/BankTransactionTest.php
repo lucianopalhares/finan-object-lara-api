@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\BankAccount;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Models\User;
 
 class BankTransactionTest extends TestCase
 {
@@ -14,7 +16,13 @@ class BankTransactionTest extends TestCase
     {
         $account = BankAccount::factory()->create();
 
-        $response = $this->post('/api/transacao', [
+        $user = User::factory()->create();
+
+        $token = JWTAuth::fromUser($user);
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->post('/api/transacao', [
             "forma_pagamento" => ['D', 'C', 'P'][array_rand(['D', 'C', 'P'])],
             "numero_conta" => $account->account_number,
             "valor" => 5
