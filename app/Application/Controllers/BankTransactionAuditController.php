@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Application\Controllers;
 
 use App\Models\BankAccount;
 use App\Models\BankTransaction;
@@ -11,6 +11,7 @@ use App\Events\BankTransactionAudited;
 use Illuminate\Support\Facades\Log;
 use App\Cache\RedisCacheService;
 use App\Models\BankTransactionAudit;
+use App\Http\Controllers\Controller;
 
 class BankTransactionAuditController extends Controller
 {

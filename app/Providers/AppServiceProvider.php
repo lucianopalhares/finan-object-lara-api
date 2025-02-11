@@ -2,10 +2,16 @@
 
 namespace App\Providers;
 
+use App\Domain\Interfaces\BankAccountInterface;
+use App\Domain\Interfaces\BankTransactionInterface;
+use App\Domain\Interfaces\PaymentMethodInterface;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use App\Listeners\RecordBankTransactionAudit;
 use App\Events\BankTransactionAudited;
+use App\Infrastructure\Persistence\Repositories\BankAccountRepository;
+use App\Infrastructure\Persistence\Repositories\BankTransactionRepository;
+use App\Infrastructure\Persistence\Repositories\PaymentMethodRepository;
 use Illuminate\Database\Eloquent\Model;
 use App\Observers\BankTransactionObserver;
 use App\Models\BankTransaction;
@@ -20,7 +26,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(
+            BankAccountInterface::class,
+            BankAccountRepository::class
+        );
+
+        $this->app->bind(
+            BankTransactionInterface::class,
+            BankTransactionRepository::class
+        );
+
+        $this->app->bind(
+            PaymentMethodInterface::class,
+            PaymentMethodRepository::class
+        );
     }
 
     /**

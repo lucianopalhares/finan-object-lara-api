@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Application\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Log as LogModel;
 use Illuminate\Support\Facades\Log;
 use App\Cache\RedisCacheService;
+use App\Http\Controllers\Controller;
 
 class LogController extends Controller
 {
