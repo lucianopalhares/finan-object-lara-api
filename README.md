@@ -14,7 +14,7 @@ Microserviço para transações financeiras. Funcionalidades:
 * API de Microserviço com as melhores práticas de design patterns
 * Banco de dados Mysql
 * Autenticação JWT
-* Documentação da API
+* Arquitetura DDD
 * Teste unitário com PHPunit
 
 ### Instalação
