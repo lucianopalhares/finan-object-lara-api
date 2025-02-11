@@ -30,12 +30,12 @@ class PublishBankTransactionAudit implements ShouldQueue
 
             $audit = BankTransactionAudit::firstOrCreate([
                 'bank_transaction_id' => $transaction->id,
-                'action' => $transaction->action
+                'action' => 'create'
             ], [
-                'user_name' => empty($transaction->user) === false ? $transaction->user->username : '',
-                'payment_method_code' => $transaction->payment_method->code,
-                'payment_method_tax_rate' => $transaction->payment_method->tax_rate,
-                'bank_account_number' => $transaction->bank_account->account_number,
+                'user_name' => $transaction->username,
+                'payment_method_code' => $transaction->payment_method_code,
+                'payment_method_tax_rate' => $transaction->payment_method_tax_rate,
+                'bank_account_number' => $transaction->account_number,
                 'value' => $transaction->value
             ]);
 

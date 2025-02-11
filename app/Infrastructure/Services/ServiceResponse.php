@@ -252,7 +252,8 @@ class ServiceResponse
      */
     public function getJsonResponse(): JsonResponse
     {
-        $data = empty($this->getData()) === false ? $this->getData() : $this->getError();
+        $data = empty($this->getData()) === false ? $this->getData() : $this->getMessage();
+        //$data .=  ' => ' . $this->getError();
         return response()->json($data, $this->getStatus());
     }
 
@@ -262,12 +263,13 @@ class ServiceResponse
      */
     public function saveLog(): void {
         try {
-            if (empty($this->error) === false)
-                Log::channel('database')->error($this->getMessage(), $this->getData());
-
-            Log::channel('database')->info($this->getMessage(), $this->getData());
+            if (empty($this->error) === false) {
+                Log::error($this->getMessage(), $this->getData());
+            } else {
+                Log::channel('database')->info($this->getMessage(), $this->getData());
+            }
         } catch (\Exception $e) {
-            Log::channel('database')->error($this->getMessage(), $this->getData());
+            Log::error($this->getMessage(), $this->getData());
         }
     }
 

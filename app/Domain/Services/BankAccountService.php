@@ -52,6 +52,8 @@ class BankAccountService extends ServiceResponse {
     public function create(array $params): bool
     {
         try {
+            DB::beginTransaction();
+
             $data = $params;
             $data['account_number'] = $data['numero_conta'];
             $data['account_balance'] = $data['saldo'];
@@ -59,6 +61,8 @@ class BankAccountService extends ServiceResponse {
             unset($data['numero_conta'], $data['saldo']);
 
             $create = $this->repository->create($data);
+
+            DB::commit();
 
             $this->setStatus(Response::HTTP_CREATED);
             $this->setMessage('Conta bancária cadastrada com sucesso!');
@@ -68,6 +72,8 @@ class BankAccountService extends ServiceResponse {
             return true;
 
         } catch (Exception $e) {
+            DB::rollBack();
+
             $this->setStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
             $this->setMessage('Erro ao salvar conta. Tente novamente mais tarde.');
             $this->setError($e->getMessage());

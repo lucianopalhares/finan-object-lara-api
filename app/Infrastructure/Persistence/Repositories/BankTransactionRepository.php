@@ -10,7 +10,7 @@ class BankTransactionRepository implements BankTransactionInterface {
 
     public function create(array $params): ?BankTransactionEntity
     {
-        $data = BankTransaction::create($params)->load(['bankAccount']);
+        $data = BankTransaction::create($params)->load(['bankAccount', 'paymentMethod', 'user']);
 
         return new BankTransactionEntity(
             id: $data->id,
@@ -19,7 +19,10 @@ class BankTransactionRepository implements BankTransactionInterface {
             bank_account_id: $data->bank_account_id,
             value: $data->value,
             account_number: $data->bankAccount->account_number,
-            account_balance: $data->bankAccount->account_balance
+            account_balance: $data->bankAccount->account_balance,
+            payment_method_code: $data->paymentMethod->code,
+            payment_method_tax_rate: $data->paymentMethod->tax_rate,
+            username: $data->username,
         );
     }
 }

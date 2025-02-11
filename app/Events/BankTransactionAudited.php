@@ -2,8 +2,9 @@
 
 namespace App\Events;
 
-use App\Models\BankTransaction;
 use Illuminate\Queue\SerializesModels;
+
+use App\Domain\Entities\BankTransactionEntity;
 
 class BankTransactionAudited
 {
@@ -14,13 +15,12 @@ class BankTransactionAudited
     /**
      * Create a new event instance.
      *
-     * @param  \App\Models\BankTransaction  $bankTransaction
+     * @param  BankTransactionEntity  $bankTransaction
      * @param  string  $action
      * @return void
      */
-    public function __construct(BankTransaction $bankTransaction, $action)
+    public function __construct(BankTransactionEntity $bankTransaction)
     {
         $this->bankTransaction = $bankTransaction;
-        $this->bankTransaction->action = $action;
     }
 }

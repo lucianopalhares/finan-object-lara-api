@@ -7,7 +7,7 @@ use Illuminate\Http\Response;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
-use App\Application\Resources\BankAccountResource;
+use App\Events\BankTransactionAudited;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Application\Requests\BankTransactionRequestCreate;
@@ -32,6 +32,8 @@ class BankTransactionService extends ServiceResponse {
     public function create(array $params): bool
     {
         try {
+            DB::beginTransaction();
+
             $paymentMethodEntity = $this->paymentMethodInterface->show($params['forma_pagamento']);
 
             $value = $params['valor'];
@@ -50,14 +52,27 @@ class BankTransactionService extends ServiceResponse {
 
             $create = $this->repository->create($transaction);
 
+            DB::commit();
+
             $this->setStatus(Response::HTTP_CREATED);
             $this->setMessage('Transação bancária cadastrada com sucesso!');
             $this->setCollectionItem($create);
             $this->setResource(BankTransactionResource::class);
+            $this->saveLog();
+
+            event(new BankTransactionAudited($create));
 
             return true;
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
 
+            $this->setStatus(Response::HTTP_NOT_FOUND);
+            $this->setMessage('Conta bancária não encontrada.');
+            $this->setError($e->getMessage());
+            $this->saveLog();
         } catch (Exception $e) {
+            DB::rollBack();
+
             $this->setStatus($e->getCode());
             $this->setMessage('Erro ao salvar conta. Tente novamente mais tarde.');
             $this->setError($e->getMessage());
